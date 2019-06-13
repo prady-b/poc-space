@@ -28,8 +28,10 @@ jobs:
           path: ~/poc-space/reactive-demo/junit
       - store_artifacts: 
           path: reactive-demo/build/jacoco
+          destination: ../jacoco
       - store_artifacts: 
           path: reactive-demo/build/reports
+          destination: ../reports
 
 workflows:
   version: 2
