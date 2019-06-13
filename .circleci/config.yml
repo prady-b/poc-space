@@ -9,13 +9,13 @@ jobs:
     steps: 
       - checkout
       - restore_cache:
-          key: reactive-demo-{{ checksum "build.gradle" }}
+          key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
       - run: cd reactive-demo && ./gradlew build
       - save_cache: 
           paths:
             - ~/.m2
             - .gradle
-          key: prady-hello-{{ checksum "build.gradle" }}
+          key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
       - run:
           name: Save test results
           command: |
@@ -27,7 +27,9 @@ jobs:
       - store_artifacts: 
           path: ~/test-results/junit
       - store_artifacts: 
-          path: build
+          path: reactive-demo/build/jacoco
+      - store_artifacts: 
+          path: reactive-demo/build/reports
 
 workflows:
   version: 2
