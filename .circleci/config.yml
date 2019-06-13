@@ -19,19 +19,17 @@ jobs:
       - run:
           name: Save test results
           command: |
-            mkdir -p ~/poc-space/reactive-demo/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/reactive-demo/test-results/junit/ \;
+            mkdir -p ~/poc-space/reactive-demo/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/reactive-demo/junit/ \;
           when: always
       - store_test_results: 
-          path: ~/poc-space/reactive-demo/test-results
+          path: ~/poc-space/reactive-demo/junit
       - store_artifacts: 
-          path: ~/poc-space/reactive-demo/test-results/junit
+          path: ~/poc-space/reactive-demo/junit
       - store_artifacts: 
           path: reactive-demo/build/jacoco
-          destination: ~/poc-space/reactive-demo/jacoco
       - store_artifacts: 
           path: reactive-demo/build/reports
-          destination: ~/poc-space/reactive-demo/reports
 
 workflows:
   version: 2
