@@ -1,7 +1,7 @@
 version: 2.1
 jobs: 
   reactive_demo: 
-    working_directory: ~/reactive-demo
+    working_directory: ~/poc-space/reactive-demo
 
     docker: 
       - image: circleci/openjdk:11-jdk-browsers
@@ -19,17 +19,19 @@ jobs:
       - run:
           name: Save test results
           command: |
-            mkdir -p ~/test-results/junit/
-            cd reactive-demo && find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+            mkdir -p test-results/junit/
+            cd reactive-demo && find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
           when: always
       - store_test_results: 
-          path: ~/test-results
+          path: test-results
       - store_artifacts: 
-          path: ~/test-results/junit
+          path: test-results/junit
       - store_artifacts: 
           path: reactive-demo/build/jacoco
+          destination: jacoco
       - store_artifacts: 
           path: reactive-demo/build/reports
+          destination: reports
 
 workflows:
   version: 2
