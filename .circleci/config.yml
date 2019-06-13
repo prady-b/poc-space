@@ -16,22 +16,17 @@ jobs:
             - ~/.m2
             - .gradle
           key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p test-results/junit/
-            cd reactive-demo && find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
-          when: always
       - store_test_results: 
-          path: test-results
+          path: reactive-demo/build/test-results/test
       - store_artifacts: 
-          path: test-results/junit
+          path: reactive-demo/build/test-results/test
+          destination: ~/poc-space/reactive-demo/junit
       - store_artifacts: 
           path: reactive-demo/build/jacoco
-          destination: jacoco
+          destination: ~/poc-space/reactive-demo/jacoco
       - store_artifacts: 
           path: reactive-demo/build/reports
-          destination: reports
+          destination: ~/poc-space/reactive-demo/reports
 
 workflows:
   version: 2
