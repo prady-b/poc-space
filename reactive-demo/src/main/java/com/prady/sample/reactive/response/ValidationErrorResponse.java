@@ -19,7 +19,7 @@ public class ValidationErrorResponse extends ErrorResponse {
     private List<ValidationErrorMessage> validationViolations;
 
     public ValidationErrorResponse(ValidationErrorMessage validationViolation) {
-        super(ERROR_CODE.VALIDATION, "Validation");
+        super(ErrorCode.VALIDATION, "Validation");
         validationViolations = Arrays.asList(validationViolation);
     }
 
@@ -29,7 +29,7 @@ public class ValidationErrorResponse extends ErrorResponse {
      * @param validationViolations
      */
     public ValidationErrorResponse(List<ValidationErrorMessage> validationViolations) {
-        super(ERROR_CODE.VALIDATION, "Validation");
+        super(ErrorCode.VALIDATION, "Validation");
         this.validationViolations = validationViolations;
     }
 

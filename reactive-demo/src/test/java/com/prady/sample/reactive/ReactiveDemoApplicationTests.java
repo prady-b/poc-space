@@ -48,10 +48,8 @@ class ReactiveDemoApplicationTests {
 
     private List<UserAccountDTO> savedUsers = new ArrayList<>();
 
-
-
     @BeforeAll
-    private void createUsers() throws InterruptedException {
+    public void createUsers() throws InterruptedException {
         webClient = WebClient.create("http://localhost:" + port);
 
         IntStream.range(0, 5).forEach(i -> {

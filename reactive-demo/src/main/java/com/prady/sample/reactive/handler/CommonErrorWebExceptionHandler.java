@@ -26,7 +26,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.prady.sample.reactive.exception.ItemAlreadyExistsException;
 import com.prady.sample.reactive.exception.ItemNotFoundException;
 import com.prady.sample.reactive.response.ErrorResponse;
-import com.prady.sample.reactive.response.ErrorResponse.ERROR_CODE;
+import com.prady.sample.reactive.response.ErrorResponse.ErrorCode;
 import com.prady.sample.reactive.response.ValidationErrorResponse;
 
 import reactor.core.publisher.Mono;
@@ -57,16 +57,16 @@ public class CommonErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
         log.error("Error in Common handler ", ex);
         if (ex instanceof ItemNotFoundException) {
             return ServerResponse.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .syncBody(new ErrorResponse(ERROR_CODE.NOT_FOUND, ex.getMessage()));
+                    .syncBody(new ErrorResponse(ErrorCode.NOT_FOUND, ex.getMessage()));
         } else if (ex instanceof ItemAlreadyExistsException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-                    .syncBody(new ErrorResponse(ERROR_CODE.ALREADY_EXISTS, ex.getMessage()));
+                    .syncBody(new ErrorResponse(ErrorCode.ALREADY_EXISTS, ex.getMessage()));
         } else if (ex instanceof ConstraintViolationException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
                     .syncBody(new ValidationErrorResponse(
                             ValidationErrorResponse.getValidationMessages(((ConstraintViolationException) ex).getConstraintViolations())));
         }
         return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
-                .syncBody(new ErrorResponse(ERROR_CODE.GENERAL, ex.getMessage()));
+                .syncBody(new ErrorResponse(ErrorCode.GENERAL, ex.getMessage()));
     }
 }
