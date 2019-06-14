@@ -7,9 +7,9 @@
 ## PoCs
 
 ### Spring Boot Reactive 
-    * Implementation CRUD APIs for User Service 
-        * Router Function and Handler 
-        * Reactive Mongo 
-        ```sh
-        ./gradlew build
-        ```
+ * Implementation CRUD APIs for User Service 
+    * Router Function and Handler 
+    * Reactive Mongo 
+    ```sh
+    ./gradlew build
+    ```
