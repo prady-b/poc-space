@@ -13,19 +13,24 @@ jobs:
       - run: cd reactive-demo && ./gradlew build
       - save_cache: 
           paths:
-            - ~/.m2
             - .gradle
           key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
       - run:
           name: Save test results
           command: |
-            mkdir -p ~/poc-space/reactive-demo/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/reactive-demo/junit/ \;
+            mkdir -p ~/poc-space/reactive-demo/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/reactive-demo/test-results/junit/ \;
           when: always
+      - run:
+          name: Codacy Coverage
+          command: | 
+            curl -Ls -o codacy-coverage-reporter "$(curl -Ls https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets | map({name, browser_download_url} | select(.name | contains("codacy-coverage-reporter-linux"))) | .[0].browser_download_url')"
+            chmod +x codacy-coverage-reporter
+            ./codacy-coverage-reporter report -l Java -r reactive-demo/build/reports/jacoco/test/jacocoTestReport.xml
       - store_test_results: 
-          path: ~/poc-space/reactive-demo/junit
+          path: ~/poc-space/reactive-demo/test-results
       - store_artifacts: 
-          path: ~/poc-space/reactive-demo/junit
+          path: ~/poc-space/reactive-demo/test-results/junit
       - store_artifacts: 
           path: reactive-demo/build/jacoco
       - store_artifacts: 
