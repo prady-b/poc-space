@@ -149,7 +149,7 @@ class ReactiveDemoApplicationTests {
         .expectStatus()
         .isBadRequest()
         .expectBody()
-        .jsonPath(EX_CODE_PATH).isEqualTo("VALIDATION1")
+        .jsonPath(EX_CODE_PATH).isEqualTo("VALIDATION")
         .jsonPath("$.validationViolations[0].fieldName").isEqualTo("lastName");
         // @formatter:on
     }
