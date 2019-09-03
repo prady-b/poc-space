@@ -44,7 +44,7 @@ public class Order implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date shippedDate;
     private String status;
-    @OneToMany(cascade = { javax.persistence.CascadeType.ALL }, fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(cascade = { javax.persistence.CascadeType.ALL }, fetch = FetchType.EAGER, mappedBy = "order")
     private Set<OrderDetail> details = new HashSet<>();
 
     /**

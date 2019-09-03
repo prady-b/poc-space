@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.prady.sample.tx.domain.Order;
+import com.prady.sample.tx.domain.OrderDetail;
 import com.prady.sample.tx.dto.OrderDTO;
 import com.prady.sample.tx.dto.OrderDetailDTO;
 import com.prady.sample.tx.dto.ProductDTO;
@@ -79,6 +80,9 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         Order order = orderMapper.toOrder(orderDTO);
+        for (OrderDetail detail : order.getDetails()) {
+            detail.setOrder(order);
+        }
         OrderDTO savedOrder = orderMapper.toOrderDTO(orderRepository.save(order));
 
         for (OrderDetailDTO detail : orderDTO.getDetails()) {

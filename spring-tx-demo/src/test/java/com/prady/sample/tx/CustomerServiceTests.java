@@ -121,7 +121,6 @@ public class CustomerServiceTests extends BaseTests {
     @Test
     public void testUpdateCustomerWithValidationError() {
         CustomerDTO customer = storeHelper.getAnyCustomer();
-        String oldFirstName = customer.getFirstName();
         customer.setFirstName(null);
         //  @formatter:off
         webTestClient.put()
@@ -134,7 +133,6 @@ public class CustomerServiceTests extends BaseTests {
         .jsonPath(EX_CODE_PATH).isEqualTo("VALIDATION")
         .jsonPath("$.validationViolations[0].fieldName").isEqualTo("firstName");
         // @formatter:on
-        customer.setFirstName(oldFirstName);
     }
 
     @Test

@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +21,9 @@ import com.prady.sample.tx.dto.CustomerDTO;
 import com.prady.sample.tx.dto.OrderDTO;
 import com.prady.sample.tx.dto.OrderDetailDTO;
 import com.prady.sample.tx.dto.ProductDTO;
+import com.prady.sample.tx.service.CustomerService;
+import com.prady.sample.tx.service.OrderService;
+import com.prady.sample.tx.service.ProductService;
 
 import reactor.core.publisher.Mono;
 
@@ -32,9 +34,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class DataStoreHelper {
 
-    private List<ProductDTO> savedProducts = new ArrayList<>();
-    private List<CustomerDTO> savedCustomers = new ArrayList<>();
-    private List<OrderDTO> savedOrders = new ArrayList<>();
+    private List<Long> savedProducts = new ArrayList<>();
+    private List<Long> savedCustomers = new ArrayList<>();
+    private List<Long> savedOrders = new ArrayList<>();
 
     @Value("${product.resource.path:/products}")
     protected String productResourcePath;
@@ -43,7 +45,12 @@ public class DataStoreHelper {
     @Value("${order.resource.path:/orders}")
     protected String resourcePath;
 
-    private Random rand = new Random();
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private OrderService orderService;
 
     public void createInitialData(int port) {
         savedProducts.addAll(createProducts(port, productResourcePath, 5));
@@ -60,13 +67,13 @@ public class DataStoreHelper {
                     .bodyToMono(OrderDTO.class)
                     .block();
 
-            savedOrders.add(savedOrder);
+            savedOrders.add(savedOrder.getId());
             // @formatter:on
         });
     }
 
-    public List<ProductDTO> createProducts(int port, String resourcePath, int noOfItems) {
-        List<ProductDTO> savedProducts = new ArrayList<>();
+    public List<Long> createProducts(int port, String resourcePath, int noOfItems) {
+        List<Long> savedProducts = new ArrayList<>();
         WebClient webClient = WebClient.create("http://localhost:" + port);
         IntStream.range(0, noOfItems).forEach(i -> {
             ProductDTO product = populateProductDTO(i);
@@ -77,7 +84,7 @@ public class DataStoreHelper {
                     .retrieve()
                     .bodyToMono(ProductDTO.class)
                     .block();
-            savedProducts.add(savedProduct);
+            savedProducts.add(savedProduct.getId());
             // @formatter:on
         });
         return savedProducts;
@@ -92,8 +99,8 @@ public class DataStoreHelper {
         return product;
     }
 
-    public List<CustomerDTO> createCustomers(int port, String resourcePath, int noOfItems) {
-        List<CustomerDTO> savedCustomers = new ArrayList<>();
+    public List<Long> createCustomers(int port, String resourcePath, int noOfItems) {
+        List<Long> savedCustomers = new ArrayList<>();
         WebClient webClient = WebClient.create("http://localhost:" + port);
         IntStream.range(0, noOfItems).forEach(i -> {
             CustomerDTO customer = populateCustomerDTO(i);
@@ -104,7 +111,7 @@ public class DataStoreHelper {
                     .retrieve()
                     .bodyToMono(CustomerDTO.class)
                     .block();
-            savedCustomers.add(savedCustomer);
+            savedCustomers.add(savedCustomer.getId());
             // @formatter:on
         });
         return savedCustomers;
@@ -119,64 +126,62 @@ public class DataStoreHelper {
     }
 
     public OrderDTO populateOrderDTO(int i) {
-        Optional<CustomerDTO> customerOp = savedCustomers.stream().findAny();
-        Optional<ProductDTO> productOp = savedProducts.stream().findAny();
-        if (productOp.isPresent() && customerOp.isPresent()) {
-            OrderDTO order = new OrderDTO();
-            order.setCustomerId(customerOp.get().getId());
-            order.setOrderDate(new Date());
-            order.setShippedDate(new Date(LocalDate.now().plusDays(10).toEpochDay()));
-            order.setStatus("ORDERED");
-            OrderDetailDTO detail = new OrderDetailDTO();
-            detail.setProductId(productOp.get().getId());
-            detail.setQuantity(2);
-            detail.setUnitPrice(productOp.get().getUnitPrice());
-            order.setDetails(new HashSet<>());
-            order.getDetails().add(detail);
-            return order;
-        }
-        return null;
+        CustomerDTO customer = getAnyCustomer();
+        ProductDTO product = getAnyProduct();
+        OrderDTO order = new OrderDTO();
+        order.setCustomerId(customer.getId());
+        order.setOrderDate(new Date());
+        order.setShippedDate(new Date(LocalDate.now().plusDays(10).toEpochDay()));
+        order.setStatus("ORDERED");
+        OrderDetailDTO detail = new OrderDetailDTO();
+        detail.setProductId(product.getId());
+        detail.setQuantity(2);
+        detail.setUnitPrice(product.getUnitPrice());
+        order.setDetails(new HashSet<>());
+        order.getDetails().add(detail);
+        return order;
     }
 
     /**
      * @return
      */
     public ProductDTO getAnyProduct() {
-        return savedProducts.get(rand.nextInt(savedProducts.size()));
+        return productService.getProduct(savedProducts.get(RandomUtils.nextInt(0, savedProducts.size())));
     }
 
     /**
      * @param product
      */
     public void removeProduct(ProductDTO product) {
-        savedProducts.remove(product);
+        savedProducts.remove(product.getId());
     }
 
     /**
      * @return
      */
     public CustomerDTO getAnyCustomer() {
-        return savedCustomers.get(rand.nextInt(savedCustomers.size()));
+        return customerService.getCustomer(savedCustomers.get(RandomUtils.nextInt(0, savedCustomers.size())));
     }
 
     /**
      * @param customer
      */
     public void removeCustomer(CustomerDTO customer) {
-        savedCustomers.remove(customer);
+        savedCustomers.remove(customer.getId());
     }
 
     /**
      * @return
      */
     public OrderDTO getAnyOrder() {
-        return savedOrders.get(rand.nextInt(savedOrders.size()));
+        return orderService.getOrder(savedOrders.get(RandomUtils.nextInt(0, savedOrders.size())));
     }
 
     /**
      * @param order
      */
     public void removeOrder(OrderDTO order) {
-        savedOrders.remove(order);
+        savedOrders.remove(order.getId());
     }
+
 }
