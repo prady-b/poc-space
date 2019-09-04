@@ -54,19 +54,19 @@ public class CommonErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
 
     private Mono<ServerResponse> errorResponse(final ServerRequest request) {
         Throwable exception = getError(request);
-        log.error("Error in Common handler ", ex);
+        log.error("Error in Common handler ", exception);
         if (exception instanceof ItemNotFoundException) {
             return ServerResponse.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
-                    .syncBody(new ErrorResponse(ErrorCode.NOT_FOUND, ex.getMessage()));
+                    .bodyValue(new ErrorResponse(ErrorCode.NOT_FOUND, exception.getMessage()));
         } else if (exception instanceof ItemAlreadyExistsException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-                    .syncBody(new ErrorResponse(ErrorCode.ALREADY_EXISTS, ex.getMessage()));
+                    .bodyValue(new ErrorResponse(ErrorCode.ALREADY_EXISTS, exception.getMessage()));
         } else if (exception instanceof ConstraintViolationException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-                    .syncBody(new ValidationErrorResponse(
-                            ValidationErrorResponse.getValidationMessages(((ConstraintViolationException) ex).getConstraintViolations())));
+                    .bodyValue(new ValidationErrorResponse(ValidationErrorResponse
+                            .getValidationMessages(((ConstraintViolationException) exception).getConstraintViolations())));
         }
         return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
-                .syncBody(new ErrorResponse(ErrorCode.GENERAL, ex.getMessage()));
+                .bodyValue(new ErrorResponse(ErrorCode.GENERAL, exception.getMessage()));
     }
 }
