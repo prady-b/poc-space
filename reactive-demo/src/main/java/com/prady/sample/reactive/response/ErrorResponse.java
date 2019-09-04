@@ -13,8 +13,8 @@ public class ErrorResponse {
         NOT_FOUND, GENERAL, VALIDATION, ALREADY_EXISTS
     }
 
-    private ErrorCode code;
-    private String messages;
+    private final ErrorCode code;
+    private final String messages;
 
     /**
      * @param code

@@ -53,15 +53,15 @@ public class CommonErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
     }
 
     private Mono<ServerResponse> errorResponse(final ServerRequest request) {
-        Throwable ex = getError(request);
+        Throwable exception = getError(request);
         log.error("Error in Common handler ", ex);
-        if (ex instanceof ItemNotFoundException) {
+        if (exception instanceof ItemNotFoundException) {
             return ServerResponse.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON)
                     .syncBody(new ErrorResponse(ErrorCode.NOT_FOUND, ex.getMessage()));
-        } else if (ex instanceof ItemAlreadyExistsException) {
+        } else if (exception instanceof ItemAlreadyExistsException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
                     .syncBody(new ErrorResponse(ErrorCode.ALREADY_EXISTS, ex.getMessage()));
-        } else if (ex instanceof ConstraintViolationException) {
+        } else if (exception instanceof ConstraintViolationException) {
             return ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
                     .syncBody(new ValidationErrorResponse(
                             ValidationErrorResponse.getValidationMessages(((ConstraintViolationException) ex).getConstraintViolations())));
