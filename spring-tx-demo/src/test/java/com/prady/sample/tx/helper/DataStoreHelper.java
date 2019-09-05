@@ -43,7 +43,7 @@ public class DataStoreHelper {
     @Value("${customer.resource.path:/customers}")
     protected String customerResourcePath;
     @Value("${order.resource.path:/orders}")
-    protected String resourcePath;
+    protected String orderResourcePath;
 
     @Autowired
     private ProductService productService;
@@ -52,34 +52,22 @@ public class DataStoreHelper {
     @Autowired
     private OrderService orderService;
 
+    private final int noOfItems = 20;
+
     public void createInitialData(int port) {
-        savedProducts.addAll(createProducts(port, productResourcePath, 5));
-        savedCustomers.addAll(createCustomers(port, customerResourcePath, 5));
-
-        WebClient webClient = WebClient.create("http://localhost:" + port);
-        IntStream.range(0, 5).forEach(i -> {
-            OrderDTO order = populateOrderDTO(i);
-            //  @formatter:off
-            OrderDTO savedOrder = webClient.post()
-                    .uri(resourcePath)
-                    .body(Mono.just(order), OrderDTO.class)
-                    .retrieve()
-                    .bodyToMono(OrderDTO.class)
-                    .block();
-
-            savedOrders.add(savedOrder.getId());
-            // @formatter:on
-        });
+        savedProducts.addAll(createProducts(port, noOfItems));
+        savedCustomers.addAll(createCustomers(port, noOfItems));
+        savedOrders.addAll(createOrders(port, noOfItems));
     }
 
-    public List<Long> createProducts(int port, String resourcePath, int noOfItems) {
+    public List<Long> createProducts(int port, int noOfItems) {
         List<Long> savedProducts = new ArrayList<>();
         WebClient webClient = WebClient.create("http://localhost:" + port);
         IntStream.range(0, noOfItems).forEach(i -> {
             ProductDTO product = populateProductDTO(i);
             //  @formatter:off
             ProductDTO savedProduct = webClient.post()
-                    .uri(resourcePath)
+                    .uri(productResourcePath)
                     .body(Mono.just(product), ProductDTO.class)
                     .retrieve()
                     .bodyToMono(ProductDTO.class)
@@ -99,14 +87,14 @@ public class DataStoreHelper {
         return product;
     }
 
-    public List<Long> createCustomers(int port, String resourcePath, int noOfItems) {
+    public List<Long> createCustomers(int port, int noOfItems) {
         List<Long> savedCustomers = new ArrayList<>();
         WebClient webClient = WebClient.create("http://localhost:" + port);
         IntStream.range(0, noOfItems).forEach(i -> {
             CustomerDTO customer = populateCustomerDTO(i);
             //  @formatter:off
             CustomerDTO savedCustomer = webClient.post()
-                    .uri(resourcePath)
+                    .uri(customerResourcePath)
                     .body(Mono.just(customer), CustomerDTO.class)
                     .retrieve()
                     .bodyToMono(CustomerDTO.class)
@@ -123,6 +111,29 @@ public class DataStoreHelper {
         customer.setLastName("Last Name " + RandomUtils.nextLong(0, 1000));
         customer.setTitle("Title " + RandomUtils.nextLong(0, 1000));
         return customer;
+    }
+
+    public List<Long> createOrders(int port, int noOfItems) {
+        List<Long> savedOrders = new ArrayList<>();
+        WebClient webClient = WebClient.create("http://localhost:" + port);
+        IntStream.range(0, noOfItems).forEach(i -> {
+            OrderDTO order = populateOrderDTO(i);
+            //  @formatter:off
+            OrderDTO savedOrder = webClient.post()
+                    .uri(orderResourcePath)
+                    .body(Mono.just(order), OrderDTO.class)
+                    .retrieve()
+                    .bodyToMono(OrderDTO.class)
+                    .block();
+
+            savedOrders.add(savedOrder.getId());
+            // @formatter:on
+        });
+        return savedOrders;
+    }
+
+    public Long createOrder(int port) {
+        return createOrders(port, 1).get(0);
     }
 
     public OrderDTO populateOrderDTO(int i) {
@@ -174,7 +185,9 @@ public class DataStoreHelper {
      * @return
      */
     public OrderDTO getAnyOrder() {
-        return orderService.getOrder(savedOrders.get(RandomUtils.nextInt(0, savedOrders.size())));
+        Long orderId = savedOrders.get(RandomUtils.nextInt(0, savedOrders.size()));
+        savedOrders.remove(orderId);
+        return orderService.getOrder(orderId);
     }
 
     /**
