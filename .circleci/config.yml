@@ -11,7 +11,7 @@ commands:
       - restore_cache:
           key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
       - run: 
-          name: "<< parameters.base_dir >>" : Building and UnitTesting
+          name: << parameters.base_dir >> : Building and UnitTesting
           command: cd << parameters.base_dir >> && ./gradlew build --info
       - run: 
           name: "<< parameters.base_dir >>" : Sonar
