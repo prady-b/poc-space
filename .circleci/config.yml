@@ -25,7 +25,6 @@ commands:
           command: |
             mkdir -p ~/poc-space/<< parameters.base_dir >>/test-results/junit/
             cd << parameters.base_dir >>
-            find . -type f -regex ".*/build/test-results/.*xml"
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/<< parameters.base_dir >>/test-results/junit/ \;
           when: always
       - store_test_results: 
