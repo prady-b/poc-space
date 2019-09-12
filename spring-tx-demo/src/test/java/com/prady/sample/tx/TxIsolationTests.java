@@ -132,7 +132,7 @@ public class TxIsolationTests extends BaseTests {
                 new CustomizableThreadFactory("testRepeatableReadMultipleLockJDBC"));
         Future<Integer> productNameFuture = executorService
                 .submit(() -> txIsolationService.selectRepeatableReadMultipleLockJDBC(unitInStock));
-        TimeUnit.MICROSECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(500);
         executorService.submit(() -> txIsolationService.saveRepeatableReadMultipleLockJDBC(unitInStock));
 
         // MySQL: Suppose that you are running in the default REPEATABLE READ isolation level. When you issue a consistent read (that is, an
@@ -140,12 +140,12 @@ public class TxIsolationTests extends BaseTests {
         // transaction deletes a row and commits after your timepoint was assigned, you do not see the row as having been deleted. Inserts
         // and updates are treated similarly
         // https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html
+        executorService.awaitTermination(3000, TimeUnit.MILLISECONDS);
         if (environment.getActiveProfiles().length > 0 && StringUtils.equals(environment.getActiveProfiles()[0], "mysql")) {
             Assertions.assertEquals(5, productNameFuture.get());
         } else {
             Assertions.assertEquals(6, productNameFuture.get());
         }
-        executorService.awaitTermination(3000, TimeUnit.MILLISECONDS);
         Assertions.assertEquals(6, productRepository.getProductCountUsingJDBC(unitInStock));
     }
 }

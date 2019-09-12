@@ -163,7 +163,7 @@ public class TxIsolationServiceImpl implements TxIsolationService {
         log.info("In selectRepeatableReadMultipleLockJDBC");
         List<Product> products = productRepository.getProductUsingJDBC(unitInStock);
         log.info("Before insert Product count: {}; Waiting for insert ", products.size());
-        // sleep(2);
+        sleep(2);
         products = productRepository.getProductUsingJDBC(unitInStock);
         log.info("After insert without Commit; Product count: {} ", products.size());
         sleep(1);
