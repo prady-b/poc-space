@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.0.BUILD-SNAPSHOT'
 	id 'java'
 	id 'jacoco'
+	id "org.sonarqube" version "2.7.1"
 }
 
 apply plugin: 'io.spring.dependency-management'
