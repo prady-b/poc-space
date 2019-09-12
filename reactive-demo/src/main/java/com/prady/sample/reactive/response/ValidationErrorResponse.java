@@ -4,7 +4,6 @@
 
 package com.prady.sample.reactive.response;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,11 +16,6 @@ import javax.validation.ConstraintViolation;
 public class ValidationErrorResponse extends ErrorResponse {
 
     private List<ValidationErrorMessage> validationViolations;
-
-    public ValidationErrorResponse(ValidationErrorMessage validationViolation) {
-        super(ErrorCode.VALIDATION, "Validation");
-        validationViolations = Arrays.asList(validationViolation);
-    }
 
     /**
      * @param code

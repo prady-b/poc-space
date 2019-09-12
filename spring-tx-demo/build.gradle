@@ -37,11 +37,6 @@ dependencies {
 test {
 	systemProperty 'spring.profiles.active', System.getProperty("spring.profiles.active")
     useJUnitPlatform()
-    jacoco {
-    	excludes = [
-    		"**/com/prady/sample/tx/SpringTxDemoApplication.*"
-    	]
-    }
     finalizedBy jacocoTestCoverageVerification
 }
 
