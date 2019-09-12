@@ -33,14 +33,14 @@ public class TxDirtyCheckServiceImpl implements TxDirtyCheckService {
         if (customerOp.isPresent()) {
             Customer customer = customerOp.get();
             customer.setLastName("Updated Last Name");
-            if (isSave) {
-                if (isNewTx) {
+            if (Boolean.TRUE.equals(isSave)) {
+                if (Boolean.TRUE.equals(isNewTx)) {
                     childService.entityDirtyCheckWithSaveNewTx(customer);
                 } else {
                     childService.entityDirtyCheckWithSaveDefault(customer);
                 }
             } else {
-                if (isNewTx) {
+                if (Boolean.TRUE.equals(isNewTx)) {
                     childService.entityDirtyCheckWithoutSaveNewTx(customer);
                 } else {
                     childService.entityDirtyCheckWithoutSaveDefault(customer);
