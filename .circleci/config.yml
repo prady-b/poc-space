@@ -5,23 +5,22 @@ commands:
     parameters:
       base_dir:
         type: string
-        default: "Hello World"
         
     steps:
       - restore_cache:
           key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
       - run: 
-          name: Building and UnitTesting
+          name: << parameters.base_dir >> Building and UnitTesting
           command: cd << parameters.base_dir >> && ./gradlew build --info
       - run: 
-          name: Sonar
+          name: << parameters.base_dir >> Sonar
           command: cd << parameters.base_dir >> && ./gradlew sonarqube -Dsonar.projectKey=pradyb_<< parameters.base_dir >> -Dsonar.organization=pradyb -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN_TOKEN 
       - save_cache: 
                 paths:
                   - .gradle
                 key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
       - run:
-          name: Save test results
+          name: << parameters.base_dir >> Save test results
           command: |
             mkdir -p ~/poc-space/<< parameters.base_dir >>/test-results/junit/
             cd << parameters.base_dir >>
@@ -31,6 +30,10 @@ commands:
           path: ~/poc-space/<< parameters.base_dir >>/test-results
       - store_artifacts: 
           path: ~/poc-space/<< parameters.base_dir >>/test-results/junit
+      - store_artifacts: 
+          path: << parameters.base_dir >>/build/jacoco
+      - store_artifacts: 
+          path: << parameters.base_dir >>/build/reports
 jobs: 
   all: 
     working_directory: ~/poc-space

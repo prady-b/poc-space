@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,6 +23,7 @@ import org.springframework.format.annotation.NumberFormat;
  *
  */
 @Entity
+@Table(indexes = { @Index(columnList = "unitsInStock") })
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -123,17 +123,17 @@ public class TxIsolationTests extends BaseTests {
     public void testRepeatableReadMultipleLockJDBC() throws Exception {
         int unitInStock = 6001;
         productRepository.save(new Product("PRODUCT_1", "Product Name 1", unitInStock, BigDecimal.valueOf(100)));
-        productRepository.save(new Product("PRODUCT_2", "Product Name 2", unitInStock, BigDecimal.valueOf(100)));
-        productRepository.save(new Product("PRODUCT_3", "Product Name 3", unitInStock, BigDecimal.valueOf(100)));
-        productRepository.save(new Product("PRODUCT_4", "Product Name 4", unitInStock, BigDecimal.valueOf(100)));
-        productRepository.save(new Product("PRODUCT_5", "Product Name 5", unitInStock, BigDecimal.valueOf(100)));
+        productRepository.save(new Product("PRODUCT_2", "Product Name 2", unitInStock + 1, BigDecimal.valueOf(100)));
+        productRepository.save(new Product("PRODUCT_3", "Product Name 3", unitInStock + 2, BigDecimal.valueOf(100)));
+        productRepository.save(new Product("PRODUCT_4", "Product Name 4", unitInStock + 3, BigDecimal.valueOf(100)));
+        Product savedProduct = productRepository.save(new Product("PRODUCT_5", "Product Name 5", unitInStock + 4, BigDecimal.valueOf(100)));
 
         ExecutorService executorService = Executors.newFixedThreadPool(2,
                 new CustomizableThreadFactory("testRepeatableReadMultipleLockJDBC"));
         Future<Integer> productNameFuture = executorService
                 .submit(() -> txIsolationService.selectRepeatableReadMultipleLockJDBC(unitInStock));
         TimeUnit.MILLISECONDS.sleep(500);
-        executorService.submit(() -> txIsolationService.saveRepeatableReadMultipleLockJDBC(unitInStock));
+        executorService.submit(() -> txIsolationService.saveRepeatableReadMultipleLockJDBC(savedProduct.getProductId(), unitInStock));
 
         executorService.awaitTermination(3000, TimeUnit.MILLISECONDS);
         if (environment.getActiveProfiles().length > 0 && StringUtils.equals(environment.getActiveProfiles()[0], "mysql")) {
@@ -141,6 +141,6 @@ public class TxIsolationTests extends BaseTests {
         } else {
             Assertions.assertEquals(6, productNameFuture.get());
         }
-        Assertions.assertEquals(6, productRepository.getProductCountUsingJDBC(unitInStock));
+        Assertions.assertEquals(6, productRepository.getProductUsingJDBC(unitInStock, unitInStock + 10).size());
     }
 }

@@ -31,6 +31,6 @@ public interface TxIsolationService {
 
     int selectRepeatableReadMultipleLockJDBC(int unitInStock);
 
-    void saveRepeatableReadMultipleLockJDBC(int unitInStock);
+    void saveRepeatableReadMultipleLockJDBC(Long productId, int unitInStock);
 
 }

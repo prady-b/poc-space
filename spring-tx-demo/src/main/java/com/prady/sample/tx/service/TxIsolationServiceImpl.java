@@ -161,24 +161,23 @@ public class TxIsolationServiceImpl implements TxIsolationService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int selectRepeatableReadMultipleLockJDBC(int unitInStock) {
         log.info("In selectRepeatableReadMultipleLockJDBC");
-        List<Product> products = productRepository.getProductUsingJDBC(unitInStock);
+        List<Product> products = productRepository.getProductUsingJDBC(unitInStock, unitInStock + 10);
         log.info("Before insert Product count: {}; Waiting for insert ", products.size());
         sleep(2);
-        products = productRepository.getProductUsingJDBC(unitInStock);
+        products = productRepository.getProductUsingJDBC(unitInStock, unitInStock + 10);
         log.info("After insert without Commit; Product count: {} ", products.size());
         sleep(1);
-        products = productRepository.getProductUsingJDBC(unitInStock);
+        products = productRepository.getProductUsingJDBC(unitInStock, unitInStock + 10);
         log.info("After insert with Commit; Product count: {} ", products.size());
         return products.size();
     }
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void saveRepeatableReadMultipleLockJDBC(int unitInStock) {
+    public void saveRepeatableReadMultipleLockJDBC(Long productId, int unitInStock) {
         log.info("In saveRepeatableReadMultipleLockJDBC");
-        List<Product> products = productRepository.getProductUsingJDBC(unitInStock);
-        productRepository.insert("PRODUCT_6", "Product Name 6", unitInStock, BigDecimal.valueOf(100));
-        productRepository.updateProductNameUsingJDBC(products.get(1).getProductId(), "Updated (saveRepeatableReadMultipleLockJDBC)");
+        productRepository.insert("PRODUCT_6", "Product Name 6", unitInStock + 6, BigDecimal.valueOf(100));
+        productRepository.updateProductNameUsingJDBC(productId, unitInStock, "Updated (saveRepeatableReadMultipleLockJDBC)");
         sleep(2);
         log.info(SUCCESS_MESSAGE);
     }

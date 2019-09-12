@@ -44,4 +44,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT product_id, product_code, product_name, units_in_stock, unit_price, version FROM product WHERE units_in_stock = ?1", nativeQuery = true)
     List<Product> getProductUsingJDBC(int unitInStock);
 
+    @Modifying
+    @Query(value = "UPDATE product SET product_name = ?3, units_in_stock = ?2 + 1 WHERE product_id = ?1", nativeQuery = true)
+    void updateProductNameUsingJDBC(Long productId, int unitInStock, String productName);
+
+    @Query(value = "SELECT product_id, product_code, product_name, units_in_stock, unit_price, version FROM product WHERE units_in_stock BETWEEN ?1 and ?2", nativeQuery = true)
+    List<Product> getProductUsingJDBC(int startUnitInStock, int endUnitInStack);
+
 }
