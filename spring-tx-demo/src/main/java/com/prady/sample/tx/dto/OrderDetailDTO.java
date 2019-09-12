@@ -14,24 +14,24 @@ import java.math.BigDecimal;
 public class OrderDetailDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private Long orderDetailId;
     private Integer version;
     private Long productId;
     private BigDecimal unitPrice;
     private Integer quantity;
 
     /**
-     * @return the id
+     * @return the orderDetailId
      */
-    public Long getId() {
-        return id;
+    public Long getOrderDetailId() {
+        return orderDetailId;
     }
 
     /**
-     * @param id the id to set
+     * @param orderDetailId the orderDetailId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderDetailId(Long id) {
+        this.orderDetailId = id;
     }
 
     /**

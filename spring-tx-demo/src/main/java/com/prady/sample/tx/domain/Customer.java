@@ -21,8 +21,8 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerId;
     @Version
     private Integer version;
     private String firstName;
@@ -32,15 +32,15 @@ public class Customer implements Serializable {
     /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long id) {
+        customerId = id;
     }
 
     /**

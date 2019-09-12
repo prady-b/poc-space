@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> existingCustomer = customerRepository.findByFirstNameAndLastName(customerDTO.getFirstName(),
                 customerDTO.getLastName());
         if (existingCustomer.isPresent()) {
-            throw new ItemAlreadyExistsException(existingCustomer.get().getId(), CUSTOMER);
+            throw new ItemAlreadyExistsException(existingCustomer.get().getCustomerId(), CUSTOMER);
         }
         log.info("Creating Customer {} ", customerDTO.getFirstName());
         Customer customer = customerMapper.toCustomer(customerDTO);

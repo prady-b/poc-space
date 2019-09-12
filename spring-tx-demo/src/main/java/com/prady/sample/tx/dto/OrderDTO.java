@@ -19,7 +19,7 @@ public class OrderDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long orderId;
     private Integer version;
     @NotNull(message = "Customer Id cannot be null")
     private Long customerId;
@@ -29,17 +29,17 @@ public class OrderDTO implements Serializable {
     private Set<OrderDetailDTO> details = new HashSet<>();
 
     /**
-     * @return the id
+     * @return the orderId
      */
-    public Long getId() {
-        return id;
+    public Long getOrderId() {
+        return orderId;
     }
 
     /**
-     * @param id the id to set
+     * @param orderId the orderId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(Long id) {
+        this.orderId = id;
     }
 
     /**

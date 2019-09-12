@@ -26,8 +26,8 @@ public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
     @Version
     private Integer version;
     @NotNull
@@ -42,17 +42,39 @@ public class Product implements Serializable {
     private BigDecimal unitPrice;
 
     /**
+     *
+     */
+    public Product() {
+        // Default
+    }
+
+    /**
+     * @param productCode
+     * @param productName
+     * @param unitsInStock
+     * @param unitPrice
+     */
+    public Product(@NotNull @Size(min = 5) String productCode, @NotNull @Size(min = 10) String productName, Integer unitsInStock,
+            BigDecimal unitPrice) {
+        super();
+        this.productCode = productCode;
+        this.productName = productName;
+        this.unitsInStock = unitsInStock;
+        this.unitPrice = unitPrice;
+    }
+
+    /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setProductId(Long id) {
+        productId = id;
     }
 
     /**

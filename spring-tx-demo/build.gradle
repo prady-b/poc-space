@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.9'
 	
 	implementation 'com.h2database:h2'
+	implementation 'mysql:mysql-connector-java'
 	
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.0.Final'
 	
@@ -33,6 +34,7 @@ dependencies {
 }
 
 test {
+	systemProperty 'spring.profiles.active', System.getProperty("spring.profiles.active")
     useJUnitPlatform()
     jacoco {
     	excludes = [

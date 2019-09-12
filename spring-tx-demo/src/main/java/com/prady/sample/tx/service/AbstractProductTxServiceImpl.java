@@ -25,7 +25,7 @@ public abstract class AbstractProductTxServiceImpl implements ProductTxService {
     @Override
     public ProductDTO save(ProductDTO productDTO) {
         if (productDTO.getUnitsInStock() < 0) {
-            throw new InsufficientResourcesException(productDTO.getId(), Math.abs(productDTO.getUnitsInStock()), "PRODUCT");
+            throw new InsufficientResourcesException(productDTO.getProductId(), Math.abs(productDTO.getUnitsInStock()), "PRODUCT");
         }
         Product product = productMapper.toProduct(productDTO);
         return productMapper.toProductDTO(productRepository.save(product));

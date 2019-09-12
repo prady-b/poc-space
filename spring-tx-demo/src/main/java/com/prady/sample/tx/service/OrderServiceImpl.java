@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderDetailDTO detail : orderDTO.getDetails()) {
             ProductDTO productDTO = productService.getProduct(detail.getProductId());
             productDTO.setUnitsInStock(productDTO.getUnitsInStock() - detail.getQuantity());
-            productService.update(productDTO.getId(), productDTO);
+            productService.update(productDTO.getProductId(), productDTO);
         }
 
         return savedOrder;

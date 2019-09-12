@@ -17,7 +17,7 @@ import com.prady.sample.tx.repository.CustomerRepository;
  *
  */
 @Service
-public class TxIsolationChildServiceImpl implements TxIsolationChildService {
+public class TxDirtyCheckChildServiceImpl implements TxDirtyCheckChildService {
 
     @Autowired
     private CustomerRepository customerRepository;

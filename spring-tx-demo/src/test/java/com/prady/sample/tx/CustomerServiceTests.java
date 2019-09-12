@@ -40,12 +40,12 @@ public class CustomerServiceTests extends BaseTests {
         CustomerDTO customer = storeHelper.getAnyCustomer();
         //  @formatter:off
         webTestClient.get()
-        .uri(customerResourcePath + "/" + customer.getId())
+        .uri(customerResourcePath + "/" + customer.getCustomerId())
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.customerId").isNotEmpty()
         .jsonPath("$.firstName").isEqualTo(customer.getFirstName());
         //  @formatter:on
     }
@@ -61,7 +61,7 @@ public class CustomerServiceTests extends BaseTests {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.customerId").isNotEmpty()
         .jsonPath("$.firstName").isEqualTo(customer.getFirstName());
         // @formatter:on
     }
@@ -107,13 +107,13 @@ public class CustomerServiceTests extends BaseTests {
         customer.setTitle("New Title");
         //  @formatter:off
         webTestClient.put()
-        .uri(customerResourcePath + "/" + customer.getId())
+        .uri(customerResourcePath + "/" + customer.getCustomerId())
         .body(Mono.just(customer), CustomerDTO.class)
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.customerId").isNotEmpty()
         .jsonPath("$.title").isEqualTo("New Title");
         // @formatter:on
     }
@@ -124,7 +124,7 @@ public class CustomerServiceTests extends BaseTests {
         customer.setFirstName(null);
         //  @formatter:off
         webTestClient.put()
-        .uri(customerResourcePath + "/" + customer.getId())
+        .uri(customerResourcePath + "/" + customer.getCustomerId())
         .body(Mono.just(customer), CustomerDTO.class)
         .exchange()
         .expectStatus()
@@ -153,7 +153,7 @@ public class CustomerServiceTests extends BaseTests {
         CustomerDTO customer = storeHelper.getAnyCustomer();
         //  @formatter:off
         webTestClient.delete()
-        .uri(customerResourcePath + "/" + customer.getId())
+        .uri(customerResourcePath + "/" + customer.getCustomerId())
         .exchange()
         .expectStatus()
         .isOk();

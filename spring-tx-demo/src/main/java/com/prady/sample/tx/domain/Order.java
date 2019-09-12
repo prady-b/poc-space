@@ -32,8 +32,8 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;
     @Version
     private Integer version;
     private Long customerId;
@@ -48,17 +48,17 @@ public class Order implements Serializable {
     private Set<OrderDetail> details = new HashSet<>();
 
     /**
-     * @return the id
+     * @return the orderId
      */
-    public Long getId() {
-        return id;
+    public Long getOrderId() {
+        return orderId;
     }
 
     /**
-     * @param id the id to set
+     * @param orderId the orderId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(Long id) {
+        orderId = id;
     }
 
     /**

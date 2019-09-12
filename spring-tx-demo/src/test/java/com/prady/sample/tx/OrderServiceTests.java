@@ -47,19 +47,19 @@ public class OrderServiceTests extends BaseTests {
         OrderDTO order = storeHelper.getAnyOrder();
         // @formatter:off
         webTestClient.get()
-        .uri(orderResourcePath + "/" + order.getId())
+        .uri(orderResourcePath + "/" + order.getOrderId())
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.orderId").isNotEmpty()
         .jsonPath("$.status").isEqualTo(order.getStatus());
         //  @formatter:on
     }
 
     @Test
     public void testCreateOrder() {
-        OrderDTO order = storeHelper.populateOrderDTO(10001);
+        OrderDTO order = storeHelper.populateOrderDTO(port, 10001, Boolean.TRUE);
         int productUnitsinStock = 0;
         for (OrderDetailDTO detail : order.getDetails()) {
             ProductDTO productDTO = productService.getProduct(detail.getProductId());
@@ -74,7 +74,7 @@ public class OrderServiceTests extends BaseTests {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.orderId").isNotEmpty()
         .jsonPath("$.status").isEqualTo(order.getStatus());
         // @formatter:on
 
@@ -86,11 +86,11 @@ public class OrderServiceTests extends BaseTests {
 
     @Test
     public void testCreateOrderWithInsufficientResourcesException() {
-        OrderDTO order = storeHelper.populateOrderDTO(10001);
+        OrderDTO order = storeHelper.populateOrderDTO(port, 10001, Boolean.TRUE);
         for (OrderDetailDTO detail : order.getDetails()) {
             ProductDTO productDTO = productService.getProduct(detail.getProductId());
             productDTO.setUnitsInStock(5);
-            productService.update(productDTO.getId(), productDTO);
+            productService.update(productDTO.getProductId(), productDTO);
             detail.setQuantity(10);
         }
         // @formatter:off
@@ -108,7 +108,7 @@ public class OrderServiceTests extends BaseTests {
 
     @Test
     public void testCreateOrderWithError() {
-        OrderDTO order = storeHelper.populateOrderDTO(10001);
+        OrderDTO order = storeHelper.populateOrderDTO(port, 10001, Boolean.FALSE);
         order.setCustomerId(null);
         //  @formatter:off
         webTestClient.post()
@@ -129,13 +129,13 @@ public class OrderServiceTests extends BaseTests {
         order.setStatus("SHIPPED");
         //  @formatter:off
         webTestClient.put()
-        .uri(orderResourcePath + "/" + order.getId())
+        .uri(orderResourcePath + "/" + order.getOrderId())
         .body(Mono.just(order), OrderDTO.class)
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.orderId").isNotEmpty()
         .jsonPath("$.status").isEqualTo("SHIPPED");
         // @formatter:on
     }
@@ -146,7 +146,7 @@ public class OrderServiceTests extends BaseTests {
         order.setCustomerId(null);
         //  @formatter:off
         webTestClient.put()
-        .uri(orderResourcePath + "/" + order.getId())
+        .uri(orderResourcePath + "/" + order.getOrderId())
         .body(Mono.just(order), OrderDTO.class)
         .exchange()
         .expectStatus()
@@ -175,7 +175,7 @@ public class OrderServiceTests extends BaseTests {
         OrderDTO order = storeHelper.getAnyOrder();
         //  @formatter:off
         webTestClient.delete()
-        .uri(orderResourcePath + "/" + order.getId())
+        .uri(orderResourcePath + "/" + order.getOrderId())
         .exchange()
         .expectStatus()
         .isOk();

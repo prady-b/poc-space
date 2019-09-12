@@ -9,7 +9,7 @@ import com.prady.sample.tx.domain.Customer;
  * @author Prady
  *
  */
-public interface TxIsolationChildService {
+public interface TxDirtyCheckChildService {
 
     void entityDirtyCheckWithoutSaveNewTx(Customer customer);
 

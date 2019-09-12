@@ -40,12 +40,12 @@ public class ProductServiceTests extends BaseTests {
         ProductDTO product = storeHelper.getAnyProduct();
         //  @formatter:off
         webTestClient.get()
-        .uri(productResourcePath + "/" + product.getId())
+        .uri(productResourcePath + "/" + product.getProductId())
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.productId").isNotEmpty()
         .jsonPath("$.productName").isEqualTo(product.getProductName());
         //  @formatter:on
     }
@@ -61,7 +61,7 @@ public class ProductServiceTests extends BaseTests {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.productId").isNotEmpty()
         .jsonPath("$.productName").isEqualTo(product.getProductName());
         // @formatter:on
     }
@@ -107,13 +107,13 @@ public class ProductServiceTests extends BaseTests {
         product.setUnitsInStock(5);
         //  @formatter:off
         webTestClient.put()
-        .uri(productResourcePath + "/" + product.getId())
+        .uri(productResourcePath + "/" + product.getProductId())
         .body(Mono.just(product), ProductDTO.class)
         .exchange()
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$.id").isNotEmpty()
+        .jsonPath("$.productId").isNotEmpty()
         .jsonPath("$.unitsInStock").isEqualTo("5");
         // @formatter:on
     }
@@ -124,7 +124,7 @@ public class ProductServiceTests extends BaseTests {
         product.setProductName(null);
         //  @formatter:off
         webTestClient.put()
-        .uri(productResourcePath + "/" + product.getId())
+        .uri(productResourcePath + "/" + product.getProductId())
         .body(Mono.just(product), ProductDTO.class)
         .exchange()
         .expectStatus()
@@ -153,7 +153,7 @@ public class ProductServiceTests extends BaseTests {
         ProductDTO product = storeHelper.getAnyProduct();
         //  @formatter:off
         webTestClient.delete()
-        .uri(productResourcePath + "/" + product.getId())
+        .uri(productResourcePath + "/" + product.getProductId())
         .exchange()
         .expectStatus()
         .isOk();

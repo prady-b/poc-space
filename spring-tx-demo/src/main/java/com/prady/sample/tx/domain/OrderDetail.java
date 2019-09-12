@@ -25,8 +25,8 @@ public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderDetailId;
     @Version
     private Integer version;
     private Long productId;
@@ -38,17 +38,17 @@ public class OrderDetail implements Serializable {
     private Integer quantity;
 
     /**
-     * @return the id
+     * @return the orderDetailId
      */
-    public Long getId() {
-        return id;
+    public Long getOrderDetailId() {
+        return orderDetailId;
     }
 
     /**
-     * @param id the id to set
+     * @param orderDetailId the orderDetailId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderDetailId(Long id) {
+        orderDetailId = id;
     }
 
     /**

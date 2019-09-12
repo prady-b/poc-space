@@ -18,7 +18,7 @@ public class CustomerDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long customerId;
     private Integer version;
     @NotNull(message = "First name cannot be null")
     @NotEmpty(message = "First name cannot be empty")
@@ -31,17 +31,17 @@ public class CustomerDTO implements Serializable {
     private String title;
 
     /**
-     * @return the id
+     * @return the customerId
      */
-    public Long getId() {
-        return id;
+    public Long getCustomerId() {
+        return customerId;
     }
 
     /**
-     * @param id the id to set
+     * @param customerId the customerId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomerId(Long id) {
+        this.customerId = id;
     }
 
     /**

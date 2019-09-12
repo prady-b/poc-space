@@ -19,7 +19,7 @@ public class ProductDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long productId;
     private Integer version;
     @NotNull(message = "Product code cannot be null")
     @NotEmpty(message = "Product code cannot be empty")
@@ -33,17 +33,17 @@ public class ProductDTO implements Serializable {
     private BigDecimal unitPrice;
 
     /**
-     * @return the id
+     * @return the productId
      */
-    public Long getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
     /**
-     * @param id the id to set
+     * @param productId the productId to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setProductId(Long id) {
+        this.productId = id;
     }
 
     /**

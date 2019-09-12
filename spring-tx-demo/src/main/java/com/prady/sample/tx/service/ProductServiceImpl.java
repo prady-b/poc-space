@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> existingProduct = productRepository.findByProductCodeAndProductName(productDTO.getProductCode(),
                 productDTO.getProductName());
         if (existingProduct.isPresent()) {
-            throw new ItemAlreadyExistsException(existingProduct.get().getId(), PRODUCT);
+            throw new ItemAlreadyExistsException(existingProduct.get().getProductId(), PRODUCT);
         }
         log.info("Creating Product {} ", productDTO.getProductName());
         Product product = productMapper.toProduct(productDTO);

@@ -15,6 +15,7 @@ import com.prady.sample.tx.dto.OrderDetailDTO;
 import com.prady.sample.tx.dto.ProductDTO;
 import com.prady.sample.tx.exception.InsufficientResourcesException;
 import com.prady.sample.tx.helper.DataStoreHelper;
+import com.prady.sample.tx.service.OrderService;
 import com.prady.sample.tx.service.OrderTxService;
 import com.prady.sample.tx.service.ProductService;
 import com.prady.sample.tx.service.ProductTxService;
@@ -26,6 +27,8 @@ public class TransactionTests extends BaseTests {
 
     @Autowired
     private OrderTxService orderTxService;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -40,7 +43,8 @@ public class TransactionTests extends BaseTests {
 
     @Test
     public void testDefaultTx() {
-        OrderDTO orderDTO = storeHelper.getAnyOrder();
+        Long orderId = storeHelper.createOrder(port);
+        OrderDTO orderDTO = orderService.getOrder(orderId);
         int productUnitsinStock = 0;
         for (OrderDetailDTO detail : orderDTO.getDetails()) {
             ProductDTO productDTO = productService.getProduct(detail.getProductId());

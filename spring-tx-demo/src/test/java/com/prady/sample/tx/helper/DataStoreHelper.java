@@ -72,7 +72,7 @@ public class DataStoreHelper {
                     .retrieve()
                     .bodyToMono(ProductDTO.class)
                     .block();
-            savedProducts.add(savedProduct.getId());
+            savedProducts.add(savedProduct.getProductId());
             // @formatter:on
         });
         return savedProducts;
@@ -99,7 +99,7 @@ public class DataStoreHelper {
                     .retrieve()
                     .bodyToMono(CustomerDTO.class)
                     .block();
-            savedCustomers.add(savedCustomer.getId());
+            savedCustomers.add(savedCustomer.getCustomerId());
             // @formatter:on
         });
         return savedCustomers;
@@ -117,7 +117,7 @@ public class DataStoreHelper {
         List<Long> savedOrders = new ArrayList<>();
         WebClient webClient = WebClient.create("http://localhost:" + port);
         IntStream.range(0, noOfItems).forEach(i -> {
-            OrderDTO order = populateOrderDTO(i);
+            OrderDTO order = populateOrderDTO(port, i, Boolean.TRUE);
             //  @formatter:off
             OrderDTO savedOrder = webClient.post()
                     .uri(orderResourcePath)
@@ -126,7 +126,7 @@ public class DataStoreHelper {
                     .bodyToMono(OrderDTO.class)
                     .block();
 
-            savedOrders.add(savedOrder.getId());
+            savedOrders.add(savedOrder.getOrderId());
             // @formatter:on
         });
         return savedOrders;
@@ -136,18 +136,30 @@ public class DataStoreHelper {
         return createOrders(port, 1).get(0);
     }
 
-    public OrderDTO populateOrderDTO(int i) {
-        CustomerDTO customer = getAnyCustomer();
-        ProductDTO product = getAnyProduct();
+    public OrderDTO populateOrderDTO(int port, int i, Boolean createProductAndCustomer) {
+        Long customerId = null;
+        Long productId = null;
+        BigDecimal unitPrice = null;
+        if (createProductAndCustomer) {
+            customerId = createCustomers(port, 1).get(0);
+            productId = createProducts(port, 1).get(0);
+            unitPrice = new BigDecimal(1000 * (i + 1));
+        } else {
+            customerId = getAnyCustomer().getCustomerId();
+            ProductDTO product = getAnyProduct();
+            productId = product.getProductId();
+            unitPrice = product.getUnitPrice();
+        }
+
         OrderDTO order = new OrderDTO();
-        order.setCustomerId(customer.getId());
+        order.setCustomerId(customerId);
         order.setOrderDate(new Date());
         order.setShippedDate(new Date(LocalDate.now().plusDays(10).toEpochDay()));
         order.setStatus("ORDERED");
         OrderDetailDTO detail = new OrderDetailDTO();
-        detail.setProductId(product.getId());
+        detail.setProductId(productId);
         detail.setQuantity(2);
-        detail.setUnitPrice(product.getUnitPrice());
+        detail.setUnitPrice(unitPrice);
         order.setDetails(new HashSet<>());
         order.getDetails().add(detail);
         return order;
@@ -164,7 +176,7 @@ public class DataStoreHelper {
      * @param product
      */
     public void removeProduct(ProductDTO product) {
-        savedProducts.remove(product.getId());
+        savedProducts.remove(product.getProductId());
     }
 
     /**
@@ -178,7 +190,7 @@ public class DataStoreHelper {
      * @param customer
      */
     public void removeCustomer(CustomerDTO customer) {
-        savedCustomers.remove(customer.getId());
+        savedCustomers.remove(customer.getCustomerId());
     }
 
     /**
@@ -194,7 +206,7 @@ public class DataStoreHelper {
      * @param order
      */
     public void removeOrder(OrderDTO order) {
-        savedOrders.remove(order.getId());
+        savedOrders.remove(order.getOrderId());
     }
 
 }
