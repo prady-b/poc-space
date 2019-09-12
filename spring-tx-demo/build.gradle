@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 	id 'jacoco'
+	id "org.sonarqube" version "2.7.1"
 }
 
 group = 'com.prady.sample'

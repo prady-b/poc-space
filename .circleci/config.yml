@@ -1,6 +1,24 @@
 version: 2.1
+commands:
+  build:
+    description: "Perform build steps"
+    parameters:
+      base_dir:
+        type: string
+        default: "Hello World"
+        
+    steps:
+      - restore_cache:
+          key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
+      - run: 
+          name: Building and UnitTesting
+          command: cd << parameters.base_dir >> && ./gradlew build 
+      - save_cache: 
+                paths:
+                  - .gradle
+                key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
 jobs: 
-  reactive_demo: 
+  all: 
     working_directory: ~/poc-space
 
     docker: 
@@ -8,36 +26,13 @@ jobs:
 
     steps: 
       - checkout
-      - restore_cache:
-          key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
-      - run: cd reactive-demo && ./gradlew build
-      - save_cache: 
-          paths:
-            - .gradle
-          key: reactive-demo-{{ checksum "reactive-demo/build.gradle" }}
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/poc-space/reactive-demo/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/reactive-demo/test-results/junit/ \;
-          when: always
-      - run:
-          name: Codacy Coverage
-          command: | 
-            curl -Ls -o codacy-coverage-reporter "$(curl -Ls https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets | map({name, browser_download_url} | select(.name | contains("codacy-coverage-reporter-linux"))) | .[0].browser_download_url')"
-            chmod +x codacy-coverage-reporter
-            ./codacy-coverage-reporter report -l Java -r reactive-demo/build/reports/jacoco/test/jacocoTestReport.xml
-      - store_test_results: 
-          path: ~/poc-space/reactive-demo/test-results
-      - store_artifacts: 
-          path: ~/poc-space/reactive-demo/test-results/junit
-      - store_artifacts: 
-          path: reactive-demo/build/jacoco
-      - store_artifacts: 
-          path: reactive-demo/build/reports
+      - build:
+          base_dir: "reactive-demo"
+      - build:
+          base_dir: "spring-tx-demo"
 
 workflows:
   version: 2
   all:
     jobs:
-      - reactive_demo
+      - all
