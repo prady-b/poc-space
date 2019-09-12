@@ -12,7 +12,10 @@ commands:
           key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
       - run: 
           name: Building and UnitTesting
-          command: cd << parameters.base_dir >> && ./gradlew build 
+          command: cd << parameters.base_dir >> && ./gradlew build --info
+      - run: 
+          name: Sonar
+          command: cd << parameters.base_dir >> && ./gradlew sonarqube -Dsonar.projectKey=pradyb_<< parameters.base_dir >> -Dsonar.organization=pradyb -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN_TOKEN 
       - save_cache: 
                 paths:
                   - .gradle
