@@ -26,9 +26,9 @@ commands:
             mkdir -p ~/poc-space/<< parameters.base_dir >>/test-results/junit/
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/poc-space/<< parameters.base_dir >>/test-results/junit/ \;
             mkdir -p ~/poc-space/<< parameters.base_dir >>/reports/tests/
-            cp -r build/reports/tests/test/ reports/tests/
+            cp -r build/reports/tests/test/* reports/tests/
             mkdir -p ~/poc-space/<< parameters.base_dir >>/reports/jacoco/
-            cp -r build/reports/jacoco/test/html/ reports/jacoco/
+            cp -r build/reports/jacoco/test/html/* reports/jacoco/
           when: always
       - store_test_results: 
           path: ~/poc-space/<< parameters.base_dir >>/test-results
