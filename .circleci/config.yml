@@ -58,7 +58,7 @@ jobs:
 
 workflows:
   version: 2
-  all:
+  "build":
     jobs:
       - "reactive-demo"
       - "spring-tx-demo"
