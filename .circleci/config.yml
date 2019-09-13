@@ -37,15 +37,18 @@ commands:
       - store_artifacts: 
           path: << parameters.base_dir >>/reports
 jobs: 
-  all: 
+  setup:
     working_directory: ~/poc-space
-
     docker: 
       - image: circleci/openjdk:11-jdk
+  "reactive-demo": 
+    steps: 
+        - checkout
+        - build:
+            base_dir: "reactive-demo"
+  "spring-tx-demo":
     steps: 
       - checkout
-      - build:
-          base_dir: "reactive-demo"
       - build:
           base_dir: "spring-tx-demo"
 
@@ -53,4 +56,10 @@ workflows:
   version: 2
   all:
     jobs:
-      - all
+      - setup
+      - "reactive-demo":
+          requires:
+            - setup
+      - "spring-tx-demo":
+          requires:
+            - setup
