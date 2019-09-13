@@ -1,3 +1,9 @@
+aliases:
+  - &build_environment
+    working_directory: ~/poc-space
+    docker:
+      - image: circleci/openjdk:11-jdk
+
 version: 2.1
 commands:
   build:
@@ -5,20 +11,20 @@ commands:
     parameters:
       base_dir:
         type: string
-        
+
     steps:
       - restore_cache:
           key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
-      - run: 
+      - run:
           name: Building and UnitTesting - << parameters.base_dir >>
           command: cd << parameters.base_dir >> && ./gradlew build --info
-      - run: 
+      - run:
           name: Sonar - << parameters.base_dir >>
-          command: cd << parameters.base_dir >> && ./gradlew sonarqube -Dsonar.projectKey=pradyb_<< parameters.base_dir >> -Dsonar.organization=pradyb -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN_TOKEN 
-      - save_cache: 
-                paths:
-                  - .gradle
-                key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
+          command: cd << parameters.base_dir >> && ./gradlew sonarqube -Dsonar.projectKey=pradyb_<< parameters.base_dir >> -Dsonar.organization=pradyb -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_LOGIN_TOKEN
+      - save_cache:
+          paths:
+            - .gradle
+          key: << parameters.base_dir >>-{{ checksum "<< parameters.base_dir >>/build.gradle" }}
       - run:
           name: Save test results - << parameters.base_dir >>
           command: |
@@ -30,28 +36,22 @@ commands:
             mkdir -p ~/poc-space/<< parameters.base_dir >>/reports/jacoco/
             cp -r build/reports/jacoco/test/html/* reports/jacoco/
           when: always
-      - store_test_results: 
+      - store_test_results:
           path: ~/poc-space/<< parameters.base_dir >>/test-results
-      - store_artifacts: 
+      - store_artifacts:
           path: ~/poc-space/<< parameters.base_dir >>/test-results/junit
-      - store_artifacts: 
+      - store_artifacts:
           path: << parameters.base_dir >>/reports
-jobs: 
-  setup:
-    working_directory: ~/poc-space
-    docker: 
-      - image: circleci/openjdk:11-jdk
-  "reactive-demo": 
-    docker: 
-      - image: circleci/openjdk:11-jdk
-    steps: 
-        - checkout
-        - build:
-            base_dir: "reactive-demo"
+jobs:
+  "reactive-demo":
+    <<: *build_environment
+    steps:
+      - checkout
+      - build:
+          base_dir: "reactive-demo"
   "spring-tx-demo":
-    docker: 
-      - image: circleci/openjdk:11-jdk
-    steps: 
+    <<: *build_environment
+    steps:
       - checkout
       - build:
           base_dir: "spring-tx-demo"
@@ -60,10 +60,5 @@ workflows:
   version: 2
   all:
     jobs:
-      - setup
-      - "reactive-demo":
-          requires:
-            - setup
-      - "spring-tx-demo":
-          requires:
-            - setup
+      - "reactive-demo"
+      - "spring-tx-demo"
