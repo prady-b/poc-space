@@ -39,14 +39,16 @@ commands:
 jobs: 
   setup:
     working_directory: ~/poc-space
+  "reactive-demo": 
     docker: 
       - image: circleci/openjdk:11-jdk
-  "reactive-demo": 
     steps: 
         - checkout
         - build:
             base_dir: "reactive-demo"
   "spring-tx-demo":
+    docker: 
+      - image: circleci/openjdk:11-jdk
     steps: 
       - checkout
       - build:
