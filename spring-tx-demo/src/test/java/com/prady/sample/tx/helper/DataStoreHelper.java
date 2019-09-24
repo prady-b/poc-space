@@ -52,7 +52,7 @@ public class DataStoreHelper {
     @Autowired
     private OrderService orderService;
 
-    private final int noOfItems = 20;
+    private static final int noOfItems = 20;
 
     public void createInitialData(int port) {
         savedProducts.addAll(createProducts(port, noOfItems));

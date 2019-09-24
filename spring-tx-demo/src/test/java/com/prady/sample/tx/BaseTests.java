@@ -41,8 +41,6 @@ public class BaseTests implements BeforeEachCallback, AfterEachCallback {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    protected WebClient webClient;
-
     @LocalServerPort
     protected int port;
 
