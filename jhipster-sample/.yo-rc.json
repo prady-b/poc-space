@@ -1,0 +1,60 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.prady.sample"
+    },
+    "jhipsterVersion": "6.3.1",
+    "applicationType": "microservice",
+    "baseName": "sample",
+    "packageName": "com.prady.sample",
+    "packageFolder": "com/prady/sample",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "NTJmNDgyYzNlYzIxNzVmZTFiOGVkN2MyN2M3ZjVjZjk2MWVlZmYwZmI5ZGE3NzZkNjE0MjkyNDZiZGNiODBjYmFjYWE2MjlhNTc3YzUxMDA3MTk5YWJlMDJjMWI1NjM4MjdhNWViNTViMjkyYTFmYWY5Mjg3NTAwMmY2Y2JkYTU=",
+    "embeddableLaunchScript": false,
+    "testFrameworks": [
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-docker",
+        "version": "2.5.0"
+      },
+      {
+        "name": "generator-jhipster-swagger-cli",
+        "version": "3.0.1"
+      },
+      {
+        "name": "generator-jhipster-spring-cloud-stream",
+        "version": "1.0.0"
+      },
+      {
+        "name": "generator-jhipster-vuejs2",
+        "version": "0.9.15"
+      },
+      {
+        "name": "generator-jhipster-feign-client",
+        "version": "1.0.6"
+      }
+    ],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
