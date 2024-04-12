@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://<>:<>@my-labs.kq228p1.mongodb.net/?retryWrites=true&w=majority&appName=my-labs
+      database: sample_mflix
