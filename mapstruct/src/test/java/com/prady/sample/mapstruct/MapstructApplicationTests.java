@@ -14,7 +14,7 @@ class MapstructApplicationTests {
 
     @Test
     void testMap() {
-        Employee employee = new Employee("Pradeep", "B", "test.com", "1234567890", List.of(new Address("123", "test", "test", "test", "test")));
+        Employee employee = new Employee("Pradeep", "B", "test.com", "1234567890", List.of(new Address("123", "test", "test", "test", "test", List.of("test1", "test2"))));
 
         EmployeeDTO employeeDTO = Mappers.getMapper(EmployeeMapper.class).transformToEmployeeDTO(employee);
         Assertions.assertEquals(employeeDTO.getEmail(), employee.getEmailId());
@@ -26,6 +26,9 @@ class MapstructApplicationTests {
         Assertions.assertEquals(employeeDTO.getAddress().get(0).getCity(), employee.getAddress().get(0).getCity());
         Assertions.assertEquals(employeeDTO.getAddress().get(0).getState(), employee.getAddress().get(0).getState());
         Assertions.assertEquals(employeeDTO.getAddress().get(0).getZipCode(), employee.getAddress().get(0).getZip());
+        Assertions.assertEquals(employeeDTO.getAddress().get(0).getAddressLines1(), employee.getAddress().get(0).getAddressLines().get(0));
+        Assertions.assertEquals(employeeDTO.getAddress().get(0).getAddressLines1(), employee.getAddress().get(0).getAddressLines().get(0));
+        Assertions.assertNull(employeeDTO.getAddress().get(0).getAddressLines3());
     }
 
 }

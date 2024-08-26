@@ -3,6 +3,8 @@ package com.prady.sample.mapstruct.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author Pradeep Balakrishnan
  */
@@ -15,4 +17,6 @@ public class Address {
     private String city;
     private String state;
     private String zip;
+
+    private List<String> addressLines;
 }

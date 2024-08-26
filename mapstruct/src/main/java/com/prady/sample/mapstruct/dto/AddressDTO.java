@@ -15,4 +15,8 @@ public class AddressDTO {
     private String city;
     private String state;
     private String zipCode;
+
+    private String addressLines1;
+    private String addressLines2;
+    private String addressLines3;
 }
