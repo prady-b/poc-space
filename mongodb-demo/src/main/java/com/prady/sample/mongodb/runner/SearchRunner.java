@@ -3,6 +3,9 @@ package com.prady.sample.mongodb.runner;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Field;
+import com.mongodb.client.model.search.SearchCount;
+
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -48,10 +51,12 @@ public class SearchRunner implements CommandLineRunner {
         searchByPath(database, "directors", "Nolan", 20);
     }
 
+    @SuppressWarnings("unchecked")
     private void searchByTitle(MongoDatabase database, String titleName, int limit) {
         //@formatter:off
         List<Bson> pipeline = List.of(
-            Aggregates.search(text(fieldPath(TITLE_ATTRIBUTE_NAME), titleName), searchOptions().index(INDEX_NAME)),
+            Aggregates.search(text(fieldPath(TITLE_ATTRIBUTE_NAME), titleName), searchOptions().index(INDEX_NAME).count(SearchCount.total())),
+            Aggregates.addFields(new Field("meta", "$$SEARCH_META")),
             Aggregates.limit(limit)
         );
         //@formatter:on
@@ -61,6 +66,7 @@ public class SearchRunner implements CommandLineRunner {
         log.info("Results for search by title {} ", titleName);
         for (Document doc : results) {
             log.info(doc.getString(TITLE_ATTRIBUTE_NAME));
+            log.info("Meta {}", doc.get("meta"));
         }
     }
 
