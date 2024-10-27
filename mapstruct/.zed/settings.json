@@ -1,0 +1,15 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "lsp": {
+    "java": {
+      "settings": {
+        "java.import.gradle.enabled": true,
+        "java.autobuild.enabled": true
+      },
+      "initialization_options": {}
+    }
+  }
+}
