@@ -1,9 +1,8 @@
 package com.prady.sample.mapstruct.domain;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author Pradeep Balakrishnan
