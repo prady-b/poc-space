@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package com.prady.sample.user;
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
+  rpc DeleteUser (DeleteUserRequest) returns (UserResponse);
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message GetUserRequest {
+  string username = 1;
+}
+
+message UpdateUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message DeleteUserRequest {
+  string username = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+}

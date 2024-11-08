@@ -1,24 +1,43 @@
-# Compiled class file
-*.class
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 
-# Log file
+# Distribution / packaging
+bin/
+target/
+build/
+.gradle
+out/
+Dist/
+/javafx/hello/HelloWorldApplication/nbproject/private/
+/javafx/hello/HelloWorldApplication/dist/
+node_modules
+
+
+# Logs
+logs/
 *.log
+*.log.json
 
-# BlueJ files
-*.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Data 
+/spring/cloud/logger/elasticsearch/data/nodes
+/spring/cloud/logger/elasticsearch/data/elasticsearch
+/spring/cloud/devops-monitoring/grafana/data/sessions/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# Project files 
+.idea/
+.eclipse-pmd
+edu.umd.cs.findbugs.core.prefs
+edu.umd.cs.findbugs.plugin.eclipse.prefs
+.classpath
+.project
+.settings/
+.factorypath
+
 .DS_Store
+
+# Others
+swift/Contacts App/Contacts App/ContactsData.json
+xcuserdata/
